@@ -17,6 +17,6 @@ open ./build/index.html
 
 To release:
 ```
-npm run build
+npm run deploy
 ```
 
