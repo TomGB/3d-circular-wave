@@ -1,7 +1,7 @@
 const p5 = require('p5');
 
 const numBoxes = 20;
-const boxSize = 90;
+const boxSize = 20;
 const numberOfWaves = -0.4;
 const speed = 0.04;
 
