@@ -81580,12 +81580,12 @@ p5.RendererGL.prototype._renderText = function(p, line, x, y, maxY) {
 });
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],2:[function(require,module,exports){
-const p5 = require('p5');
+const processing = require('./processing');
 
 const numBoxes = 20;
 const boxSize = 20;
 const numberOfWaves = -0.4;
-const speed = 0.04;
+const speed = 0.05;
 
 let boxes = Array(numBoxes * numBoxes).fill(null);
 const halfOffset = numBoxes * boxSize / 2;
@@ -81626,38 +81626,52 @@ const drawBoxes = (p) => {
   })
 }
 
-const sketch = (p) => {
-	p.setup = () => {
-    camera = {
-      pan: p.radians(45),
-      tilt: p.radians(45),
-    };
+const setup = (p) => {
+  camera = {
+    pan: p.radians(45),
+    tilt: p.radians(45),
+  };
 
-    p.createCanvas(p.windowWidth, p.windowHeight, p.WEBGL);
-    p.ortho(-p.width / 2, p.width / 2, -p.height / 2, p.height / 2, 0, 2000);
-    
-    createBoxes(p);
+  p.createCanvas(p.windowWidth, p.windowHeight, p.WEBGL);
+  p.ortho(-p.width / 2, p.width / 2, -p.height / 2, p.height / 2, 0, 2000);
+  
+  createBoxes(p);
 
-    p.noStroke();
-    p.ambientLight(50);
-	};
+  p.noStroke();
+  p.ambientLight(50);
+};
 
-	p.draw = () => {
-    p.directionalLight(250, 250, 250, 0, 2, 0.25);
-    p.directionalLight(250, 250, 250, 1, 0.3, 0.25);
-    
-    p.rotateX(camera.tilt);
-    p.rotateZ(camera.pan);
+const draw = (p) => {
+  p.directionalLight(250, 250, 250, 0, 2, 0.25);
+  p.directionalLight(250, 250, 250, 1, 0.3, 0.25);
+  
+  p.rotateX(camera.tilt);
+  p.rotateZ(camera.pan);
 
-    p.background(0);
-    
-    drawBoxes(p);
-	};
+  p.background(0);
+  
+  drawBoxes(p);
+};
 
-	p.windowResized = () => {
-		p.resizeCanvas(p.windowWidth, p.windowHeight);
-	}
+processing(setup, draw);
+},{"./processing":3}],3:[function(require,module,exports){
+const p5 = require('p5');
+
+const init = (setup, draw) => {
+  let processing;
+  const sketch = (p) => {
+    processing = p;
+    p.setup = () => setup(p);
+    p.draw = () => draw(p);
+    p.windowResized = () => {
+      p.resizeCanvas(p.windowWidth, p.windowHeight);
+    }
+  }
+
+  new p5(sketch);
+
+  return processing;
 }
 
-var app = new p5(sketch);
+module.exports = init;
 },{"p5":1}]},{},[2]);
